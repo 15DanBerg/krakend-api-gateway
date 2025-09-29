@@ -1,0 +1,15 @@
+services:
+  front-end:
+    build:
+      context: ../frontend-simple-login #https://github.com/15DanBerg/frontend-simple-login
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+  # Exemplo para krakend futuramente
+  # krakend:
+  #   image: krakend
+  #   ports:
+  #     - "8081:8080"
+  #   volumes:
+  #     - ./krakend/krakend.json:/etc/krakend/krakend.json
