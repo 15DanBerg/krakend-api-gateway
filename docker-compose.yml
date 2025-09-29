@@ -1,7 +1,7 @@
 services:
   front-end:
     build:
-      context: ../frontend-simple-login
+      context: ../frontend-simple-login #https://github.com/15DanBerg/frontend-simple-login
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
