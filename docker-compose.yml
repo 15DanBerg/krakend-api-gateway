@@ -9,17 +9,19 @@ services:
     container_name: keycloak
     command: start-dev
     environment:
-      KC_HOSTNAME: ${KC_HOSTNAME}
-      KC_HOSTNAME_STRICT_BACKCHANNEL: false
-      KC_HTTP_ENABLED: true
-      KC_HOSTNAME_STRICT_HTTPS: true
-      KC_HEALTH_ENABLED: true
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      #Database settings
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://${KC_DB_HOST}:${KC_DB_PORT}/${KC_DB_NAME}
       KC_DB_USERNAME: ${KC_DB_USERNAME}
       KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      #HOST settings
+      KC_HOSTNAME: ${KC_HOSTNAME}
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
+      KC_HTTP_ENABLED: "true"
+      #admin user
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+
     networks:
       - auth-network
     ports:
