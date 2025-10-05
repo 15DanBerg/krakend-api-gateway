@@ -1,15 +1,48 @@
-services:
-  front-end:
-    build:
-      context: ../frontend-simple-login #https://github.com/15DanBerg/frontend-simple-login
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
+networks:
+  auth-network:
+    driver: bridge
 
-  # Exemplo para krakend futuramente
-  # krakend:
-  #   image: krakend
-  #   ports:
-  #     - "8081:8080"
-  #   volumes:
-  #     - ./krakend/krakend.json:/etc/krakend/krakend.json
+services:
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.6
+    container_name: keycloak
+    command: start-dev
+    environment:
+      #Database settings
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://${KC_DB_HOST}:${KC_DB_PORT}/${KC_DB_NAME}
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      #HOST settings
+      KC_HOSTNAME: ${KC_HOSTNAME}
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
+      KC_HTTP_ENABLED: "true"
+      #admin user
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+
+    networks:
+      - auth-network
+    ports:
+      - "${KEYCLOAK_PORT}:8080"
+    depends_on:
+      - keycloak-db
+
+  keycloak-db:
+    image: postgres:15
+    container_name: keycloak-db
+    restart: always
+    environment:
+      POSTGRES_DB: ${KC_DB_NAME}
+      POSTGRES_USER: ${KC_DB_USERNAME}
+      POSTGRES_PASSWORD: ${KC_DB_PASSWORD}
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+    networks:
+      - auth-network
+    expose:
+      - "${KC_DB_PORT}"
+
+volumes:
+  keycloak-db-data:
