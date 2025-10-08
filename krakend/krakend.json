@@ -2,15 +2,15 @@
   "version": 3,
   "endpoints": [
     {
-      "endpoint": "/hello",
+      "endpoint": "/novo",
       "method": "GET",
       "output_encoding": "json",
       "backend": [
         {
-          "url_pattern": "/world",
+          "url_pattern": "/worker/new",
           "encoding": "json",
           "method": "GET",
-          "host": ["https://jsonplaceholder.typicode.com"]
+          "host": ["http://worker:8080"]
         }
       ]
     }
